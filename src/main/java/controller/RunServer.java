@@ -60,6 +60,7 @@ public class RunServer {
                 break;
             }
             String result = process(input);
+            System.out.println(result);
             dataOutputStream.writeUTF(result);
             dataOutputStream.flush();
             Finisher.finish();
@@ -103,6 +104,9 @@ public class RunServer {
             }
             case "updateDeck" ->{
                 result = UpdateDeck.update();
+            }
+            case "updatePicture" ->{
+                result = UpdatePicture.update(jsonInput.get("username").toString(),jsonInput.get("address").toString());
             }
             case "shop" -> {
                 Shop shop = new Shop();
