@@ -32,24 +32,47 @@ public class Shop {
             jsonResult.put("message","not enough money");
             return jsonResult.toJSONString();
         }
+        String result = "";
         if (card instanceof Monster) {
             Monster monster = (Monster) card;
             Monster monster1 = new Monster(monster.getName(), monster.getLevel(), monster.getAttribute()
                     , monster.getMonsterType(), monster.getCardType(), monster.getAttack(), monster.getDefence(), monster.getDescription(), monster.getPrice());
             users.get(token).addCard(monster1);
-            return gson.toJson(card);
+            jsonResult.put("type","monster");
+            result += jsonResult.toJSONString()+"#####";
+            result += gson.toJson(card);
+            return result;
         }
         else if (card instanceof Spell) {
             Spell spell = (Spell) card;
             Spell spell1 = new Spell(spell.getName(), spell.getIcon(), spell.getDescription(), spell.getStatus(), spell.getPrice());
             users.get(token).addCard(spell1);
-            return gson.toJson(card);
+            jsonResult.put("type","spell");
+            result += jsonResult.toJSONString()+"#####";
+            result += gson.toJson(card);
+            return result;
         }
         else {
             Trap trap = (Trap) card;
             Trap trap1 = new Trap(trap.getName(), trap.getIcon(), trap.getDescription(), trap.getStatus(), trap.getPrice());
             users.get(token).addCard(trap1);
-            return gson.toJson(card);
+            jsonResult.put("type","trap");
+            result += jsonResult.toJSONString()+"#####";
+            result += gson.toJson(card);
+            return result;
         }
+    }
+
+    public String countCard(String cardName,String token){
+        JSONObject jsonResult = new JSONObject();
+        HashMap<String, User> users = RunServer.getUsersLoggedIn();
+        if (!users.containsKey(token)){
+            jsonResult.put("type","Error");
+            jsonResult.put("message","token invalid!");
+            return jsonResult.toJSONString();
+        }
+        User user = users.get(token);
+        jsonResult.put("count",user.showNumberOfCard(cardName));
+        return jsonResult.toJSONString();
     }
 }

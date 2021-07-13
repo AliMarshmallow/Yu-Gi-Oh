@@ -132,6 +132,12 @@ public class RunServer {
                 String token = jsonInput.get("token").toString();
                 result = shop.buyCard(cardName,token);
             }
+            case "countCard" -> {
+                Shop shop = new Shop();
+                String cardName = jsonInput.get("cardName").toString();
+                String token = jsonInput.get("token").toString();
+                result = shop.countCard(cardName,token);
+            }
             default -> {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("type", "Error");
