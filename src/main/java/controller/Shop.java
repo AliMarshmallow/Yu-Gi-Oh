@@ -12,24 +12,24 @@ import java.util.HashMap;
 
 public class Shop {
 
-    public String buyCard(String cardName,String token) {
+    public String buyCard(String cardName, String token) {
         Gson gson = new Gson();
         JSONObject jsonResult = new JSONObject();
         HashMap<String, User> users = RunServer.getUsersLoggedIn();
-        if (!users.containsKey(token)){
-            jsonResult.put("type","Error");
-            jsonResult.put("message","token invalid!");
+        if (!users.containsKey(token)) {
+            jsonResult.put("type", "Error");
+            jsonResult.put("message", "token invalid!");
             return jsonResult.toJSONString();
         }
         if (Card.getCardByName(cardName) == null) {
-            jsonResult.put("type","Error");
-            jsonResult.put("message","wrong card name");
+            jsonResult.put("type", "Error");
+            jsonResult.put("message", "wrong card name");
             return jsonResult.toJSONString();
         }
         Card card = Card.getCardByName(cardName);
         if (card.getPrice() > users.get(token).getCredit()) {
-            jsonResult.put("type","Error");
-            jsonResult.put("message","not enough money");
+            jsonResult.put("type", "Error");
+            jsonResult.put("message", "not enough money");
             return jsonResult.toJSONString();
         }
         String result = "";
@@ -38,41 +38,39 @@ public class Shop {
             Monster monster1 = new Monster(monster.getName(), monster.getLevel(), monster.getAttribute()
                     , monster.getMonsterType(), monster.getCardType(), monster.getAttack(), monster.getDefence(), monster.getDescription(), monster.getPrice());
             users.get(token).addCard(monster1);
-            jsonResult.put("type","monster");
-            result += jsonResult.toJSONString()+"#####";
+            jsonResult.put("type", "monster");
+            result += jsonResult.toJSONString() + "#####";
             result += gson.toJson(card);
             return result;
-        }
-        else if (card instanceof Spell) {
+        } else if (card instanceof Spell) {
             Spell spell = (Spell) card;
             Spell spell1 = new Spell(spell.getName(), spell.getIcon(), spell.getDescription(), spell.getStatus(), spell.getPrice());
             users.get(token).addCard(spell1);
-            jsonResult.put("type","spell");
-            result += jsonResult.toJSONString()+"#####";
+            jsonResult.put("type", "spell");
+            result += jsonResult.toJSONString() + "#####";
             result += gson.toJson(card);
             return result;
-        }
-        else {
+        } else {
             Trap trap = (Trap) card;
             Trap trap1 = new Trap(trap.getName(), trap.getIcon(), trap.getDescription(), trap.getStatus(), trap.getPrice());
             users.get(token).addCard(trap1);
-            jsonResult.put("type","trap");
-            result += jsonResult.toJSONString()+"#####";
+            jsonResult.put("type", "trap");
+            result += jsonResult.toJSONString() + "#####";
             result += gson.toJson(card);
             return result;
         }
     }
 
-    public String countCard(String cardName,String token){
+    public String countCard(String cardName, String token) {
         JSONObject jsonResult = new JSONObject();
         HashMap<String, User> users = RunServer.getUsersLoggedIn();
-        if (!users.containsKey(token)){
-            jsonResult.put("type","Error");
-            jsonResult.put("message","token invalid!");
+        if (!users.containsKey(token)) {
+            jsonResult.put("type", "Error");
+            jsonResult.put("message", "token invalid!");
             return jsonResult.toJSONString();
         }
         User user = users.get(token);
-        jsonResult.put("count",user.showNumberOfCard(cardName));
+        jsonResult.put("count", user.showNumberOfCard(cardName));
         return jsonResult.toJSONString();
     }
 }
