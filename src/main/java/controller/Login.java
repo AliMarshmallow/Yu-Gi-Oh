@@ -10,7 +10,7 @@ public class Login {
     private JSONObject jsonResult = new JSONObject();
 
     public String loginUser(String username, String password) {
-        if (isUsernameAndPasswordMatch(username,password)){
+        if (!isUsernameAndPasswordMatch(username,password)){
             jsonResult.put("type","Error");
             jsonResult.put("message","wrong password");
             return jsonResult.toJSONString();
