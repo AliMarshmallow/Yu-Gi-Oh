@@ -8,6 +8,7 @@ import model.card.Trap;
 import model.user.User;
 import org.json.simple.JSONObject;
 
+import java.awt.dnd.DragSourceDragEvent;
 import java.util.HashMap;
 
 public class Shop {
@@ -72,5 +73,27 @@ public class Shop {
         User user = users.get(token);
         jsonResult.put("count", user.showNumberOfCard(cardName));
         return jsonResult.toJSONString();
+    }
+
+    public String addCard(String cardName,String number){
+        JSONObject jsonResult = new JSONObject();
+        if (Card.getCardByName(cardName) == null) {
+            jsonResult.put("type", "Error");
+            jsonResult.put("message", "token invalid!");
+            return jsonResult.toJSONString();
+        }
+        Card.addCardNumber(cardName,Integer.parseInt(number));
+        return "success";
+    }
+
+    public String banCard(String cardName){
+        JSONObject jsonResult = new JSONObject();
+        if (Card.getCardByName(cardName) == null) {
+            jsonResult.put("type", "Error");
+            jsonResult.put("message", "token invalid!");
+            return jsonResult.toJSONString();
+        }
+        Card.banCard(cardName);
+        return "success";
     }
 }

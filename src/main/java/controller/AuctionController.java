@@ -30,5 +30,15 @@ public class AuctionController {
         jsonResult.put("message", "Auction added successfully");
         return jsonResult.toJSONString();
     }
+    public String active(String token){
+        JSONObject jsonResult = new JSONObject();
+        HashMap<String, User> users = RunServer.getUsersLoggedIn();
+        if (!users.containsKey(token)) {
+            jsonResult.put("type", "Error");
+            jsonResult.put("message", "token invalid!");
+            return jsonResult.toJSONString();
+        }
+        return Auction.getActiveAuction();
+    }
 
 }

@@ -1,5 +1,6 @@
 package controller;
 
+import model.Auction;
 import model.Finisher;
 import model.Initializer;
 import model.user.User;
@@ -142,7 +143,12 @@ public class RunServer {
                 result = OnlineUser.getUser();
             }
             case "addAuction" -> {
-                result = "";
+                AuctionController auction = new AuctionController();
+                result = auction.newAuction(jsonInput.get("startOffer").toString(), jsonInput.get("cardName").toString(), jsonInput.get("token").toString());
+            }
+            case "getActiveAuction" -> {
+                AuctionController auction = new AuctionController();
+                result = auction.active(jsonInput.get("token").toString());
             }
             default -> {
                 JSONObject jsonObject = new JSONObject();
