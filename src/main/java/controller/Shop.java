@@ -86,6 +86,17 @@ public class Shop {
         return "success";
     }
 
+    public String removeCard(String cardName,String number){
+        JSONObject jsonResult = new JSONObject();
+        if (Card.getCardByName(cardName) == null) {
+            jsonResult.put("type", "Error");
+            jsonResult.put("message", "token invalid!");
+            return jsonResult.toJSONString();
+        }
+        Card.removeCardNumber(cardName,Integer.parseInt(number));
+        return "success";
+    }
+
     public String banCard(String cardName){
         JSONObject jsonResult = new JSONObject();
         if (Card.getCardByName(cardName) == null) {

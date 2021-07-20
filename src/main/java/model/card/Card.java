@@ -42,6 +42,12 @@ public class Card {
         cardNumber.put(cardName, holder + number);
     }
 
+    public static void removeCardNumber(String cardName, int number) {
+        int holder = cardNumber.get(cardName);
+        cardNumber.remove(cardName);
+        cardNumber.put(cardName, holder - number);
+    }
+
     public String getIcon() {
         return icon;
     }
