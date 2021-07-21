@@ -7,7 +7,6 @@ import model.card.Spell;
 import model.card.Trap;
 import model.user.User;
 import org.json.simple.JSONObject;
-
 import java.util.HashMap;
 
 public class Shop {
@@ -32,6 +31,12 @@ public class Shop {
             jsonResult.put("message", "not enough money");
             return jsonResult.toJSONString();
         }
+        if(Card.getCardNumber(cardName) == 0){
+            jsonResult.put("type", "Error");
+            jsonResult.put("message", "no cards left");
+            return jsonResult.toJSONString();
+        }
+        Card.removeCardNumber(cardName,1);
         String result = "";
         if (card instanceof Monster) {
             Monster monster = (Monster) card;
@@ -72,5 +77,38 @@ public class Shop {
         User user = users.get(token);
         jsonResult.put("count", user.showNumberOfCard(cardName));
         return jsonResult.toJSONString();
+    }
+
+    public String addCard(String cardName,String number){
+        JSONObject jsonResult = new JSONObject();
+        if (Card.getCardByName(cardName) == null) {
+            jsonResult.put("type", "Error");
+            jsonResult.put("message", "token invalid!");
+            return jsonResult.toJSONString();
+        }
+        Card.addCardNumber(cardName,Integer.parseInt(number));
+        return "success";
+    }
+
+    public String removeCard(String cardName,String number){
+        JSONObject jsonResult = new JSONObject();
+        if (Card.getCardByName(cardName) == null) {
+            jsonResult.put("type", "Error");
+            jsonResult.put("message", "token invalid!");
+            return jsonResult.toJSONString();
+        }
+        Card.removeCardNumber(cardName,Integer.parseInt(number));
+        return "success";
+    }
+
+    public String banCard(String cardName){
+        JSONObject jsonResult = new JSONObject();
+        if (Card.getCardByName(cardName) == null) {
+            jsonResult.put("type", "Error");
+            jsonResult.put("message", "token invalid!");
+            return jsonResult.toJSONString();
+        }
+        Card.banCard(cardName);
+        return "success";
     }
 }

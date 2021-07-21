@@ -1,5 +1,6 @@
 package controller;
 
+import model.Auction;
 import model.Finisher;
 import model.Initializer;
 import model.user.User;
@@ -137,6 +138,29 @@ public class RunServer {
                 String cardName = jsonInput.get("cardName").toString();
                 String token = jsonInput.get("token").toString();
                 result = shop.countCard(cardName,token);
+            }
+            case "getOnline" -> {
+                result = OnlineUser.getUser();
+            }
+            case "addAuction" -> {
+                AuctionController auction = new AuctionController();
+                result = auction.newAuction(jsonInput.get("startOffer").toString(), jsonInput.get("cardName").toString(), jsonInput.get("token").toString());
+            }
+            case "getActiveAuction" -> {
+                AuctionController auction = new AuctionController();
+                result = auction.active(jsonInput.get("token").toString());
+            }
+            case "adminAdd" ->{
+                Shop shop = new Shop();
+                result = shop.addCard(jsonInput.get("cardName").toString(),jsonInput.get("number").toString());
+            }
+            case "adminBan" ->{
+                Shop shop = new Shop();
+                result = shop.banCard(jsonInput.get("cardName").toString());
+            }
+            case "adminRemove" -> {
+                Shop shop = new Shop();
+                result = shop.removeCard(jsonInput.get("cardName").toString(),jsonInput.get("number").toString());
             }
             default -> {
                 JSONObject jsonObject = new JSONObject();

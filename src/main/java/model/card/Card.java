@@ -1,7 +1,6 @@
 package model.card;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.*;
 
 public class Card {
     private static ArrayList<Card> cards = new ArrayList<>();
@@ -24,6 +23,31 @@ public class Card {
     protected String monsterType;
     protected String icon;
     protected String status;
+    protected static HashMap<String, Boolean> cardBoolean = new HashMap<>();
+    protected static HashMap<String, Integer> cardNumber = new HashMap<>();
+
+    public static void banCard(String cardName) {
+        boolean holder = cardBoolean.get(cardName);
+        cardBoolean.remove(cardName);
+        cardBoolean.put(cardName,!holder);
+    }
+
+    public static int getCardNumber(String cardName)
+    {
+        return cardNumber.get(cardName);
+    }
+
+    public static void addCardNumber(String cardName, int number) {
+        int holder = cardNumber.get(cardName);
+        cardNumber.remove(cardName);
+        cardNumber.put(cardName, holder + number);
+    }
+
+    public static void removeCardNumber(String cardName, int number) {
+        int holder = cardNumber.get(cardName);
+        cardNumber.remove(cardName);
+        cardNumber.put(cardName, holder - number);
+    }
 
     public String getIcon() {
         return icon;
@@ -166,13 +190,13 @@ public class Card {
         return attribute;
     }
 
-    public int getLevel(){
+    public int getLevel() {
         return level;
     }
 
     public static Monster getMonsterByName(String name) {
         for (Monster monster : allMonsters) {
-            if (monster.name.equals(name)){
+            if (monster.name.equals(name)) {
                 return monster;
             }
         }
