@@ -177,7 +177,9 @@ public class Initializer {
     private static void addAuction() throws IOException {
         File directoryPath = new File("resources/auctions");
         File[] filesList = directoryPath.listFiles();
-        assert filesList != null;
+        if ( filesList == null){
+            return;
+        }
         for (File file : filesList) {
             Gson gson = new Gson();
             Reader reader = new FileReader(file);
