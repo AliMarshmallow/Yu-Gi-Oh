@@ -166,6 +166,7 @@ public class RunServer {
                 String username = jsonInput.get("username").toString();
                 String message = jsonInput.get("message").toString();
                 ChatRoom.addMessage(username, message);
+                result = "success";
             }
             case "getChat" -> {
                 result = ChatRoom.getAllMessages();

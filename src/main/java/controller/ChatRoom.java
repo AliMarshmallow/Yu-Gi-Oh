@@ -10,7 +10,11 @@ public class ChatRoom {
         allMessages.add(string);
     }
 
-    public static ArrayList<String> getAllMessages() {
-        return allMessages;
+    public static String getAllMessages() {
+        String messages = "";
+        for (String message: allMessages) {
+            messages += message + "\n";
+        }
+        return messages;
     }
 }
