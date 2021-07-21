@@ -83,7 +83,7 @@ public class Shop {
         JSONObject jsonResult = new JSONObject();
         if (Card.getCardByName(cardName) == null) {
             jsonResult.put("type", "Error");
-            jsonResult.put("message", "token invalid!");
+            jsonResult.put("message", "card invalid!");
             return jsonResult.toJSONString();
         }
         Card.addCardNumber(cardName,Integer.parseInt(number));
@@ -94,7 +94,7 @@ public class Shop {
         JSONObject jsonResult = new JSONObject();
         if (Card.getCardByName(cardName) == null) {
             jsonResult.put("type", "Error");
-            jsonResult.put("message", "token invalid!");
+            jsonResult.put("message", "card invalid!");
             return jsonResult.toJSONString();
         }
         Card.removeCardNumber(cardName,Integer.parseInt(number));
@@ -105,7 +105,7 @@ public class Shop {
         JSONObject jsonResult = new JSONObject();
         if (Card.getCardByName(cardName) == null) {
             jsonResult.put("type", "Error");
-            jsonResult.put("message", "token invalid!");
+            jsonResult.put("message", "card invalid!");
             return jsonResult.toJSONString();
         }
         Card.banCard(cardName);
