@@ -1,6 +1,7 @@
 package model;
 
 import com.google.gson.Gson;
+import model.card.Card;
 import model.card.Monster;
 import model.card.Spell;
 import model.card.Trap;
@@ -13,6 +14,7 @@ import org.json.simple.parser.ParseException;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class Initializer {
@@ -22,6 +24,8 @@ public class Initializer {
         initializeSpellsAndTraps();
         addUsers();
         addDecks();
+        addAuction();
+        addCardNumber();
         //showAllUsers();
     }
 
@@ -168,6 +172,28 @@ public class Initializer {
             Deck.addToAllDeck(deck);
 
         }
+    }
+
+    private static void addAuction() throws IOException {
+        File directoryPath = new File("resources/auctions");
+        File[] filesList = directoryPath.listFiles();
+        assert filesList != null;
+        for (File file : filesList) {
+            Gson gson = new Gson();
+            Reader reader = new FileReader(file);
+            Auction auction = gson.fromJson(reader, Auction.class);
+            Auction.addAuction(auction);
+        }
+    }
+
+    private static void addCardNumber() throws IOException{
+        Gson gson = new Gson();
+        String fileAddress = "resources/cardNumber/number.json";
+        Reader reader = new FileReader(fileAddress);
+        Card.setCardNumber(gson.fromJson(reader, HashMap.class));
+        String fileAddress2 = "resources/cardNumber/boolean.json";
+        reader = new FileReader(fileAddress2);
+        Card.setCardBoolean(gson.fromJson(reader, HashMap.class));
     }
 
 }

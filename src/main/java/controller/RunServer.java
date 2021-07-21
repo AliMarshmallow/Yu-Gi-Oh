@@ -1,5 +1,6 @@
 package controller;
 
+import model.Auction;
 import model.Finisher;
 import model.Initializer;
 import model.user.User;
@@ -10,6 +11,7 @@ import org.json.simple.parser.ParseException;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -19,6 +21,7 @@ public class RunServer {
 
     private static JSONParser parser = new JSONParser();
     private static HashMap<String, User> usersLoggedIn = new HashMap<>();
+    private static boolean isObject = false;
 
     public static void runApp() {
         try {
@@ -42,7 +45,8 @@ public class RunServer {
             try {
                 DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
                 DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
-                getInputAndProcess(dataInputStream, dataOutputStream);
+                ObjectOutputStream objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+                getInputAndProcess(dataInputStream, dataOutputStream,objectOutputStream);
                 dataInputStream.close();
                 socket.close();
             } catch (IOException e) {
@@ -51,7 +55,7 @@ public class RunServer {
         }).start();
     }
 
-    private static void getInputAndProcess(DataInputStream dataInputStream, DataOutputStream dataOutputStream) throws IOException {
+    private static void getInputAndProcess(DataInputStream dataInputStream, DataOutputStream dataOutputStream,ObjectOutputStream objectOutputStream) throws IOException {
         while (true) {
             String input;
             try {
@@ -59,17 +63,23 @@ public class RunServer {
             } catch (SocketException e) {
                 break;
             }
-            String result = process(input);
-            System.out.println(result);
-            dataOutputStream.writeUTF(result);
-            dataOutputStream.flush();
+            Object result = process(input);
+            System.out.println(result.toString());
+            if (!isObject) {
+                dataOutputStream.writeUTF((String) result);
+                dataOutputStream.flush();
+            }else {
+                isObject = false;
+                objectOutputStream.writeObject(result);
+                objectOutputStream.flush();
+            }
             Finisher.finish();
         }
     }
 
-    static String process(String input) {
+    static Object process(String input) {
         JSONObject jsonInput = null;
-        String result;
+        Object result;
         try {
             jsonInput = (JSONObject) parser.parse(input);
         } catch (ParseException e) {
@@ -99,9 +109,18 @@ public class RunServer {
                 String token = jsonInput.get("token").toString();
                 result = profileMenu.profileChangeNickname(nickname, token);
             }
-            case "updateUsers" -> {
-                result = UpdateUsers.update();
+            case "scoreboard" -> {
+                Scoreboard scoreboard = new Scoreboard();
+                result = scoreboard.getSortUsersByScore();
             }
+            case "updateUsers" -> {
+                isObject = true;
+                result = UpdateUsers.update(jsonInput.get("number").toString());
+            }
+            case "countUsers" -> {
+                result = UpdateUsers.count();
+            }
+
             case "updateDeck" ->{
                 result = UpdateDeck.update();
             }
@@ -113,6 +132,35 @@ public class RunServer {
                 String cardName = jsonInput.get("cardName").toString();
                 String token = jsonInput.get("token").toString();
                 result = shop.buyCard(cardName,token);
+            }
+            case "countCard" -> {
+                Shop shop = new Shop();
+                String cardName = jsonInput.get("cardName").toString();
+                String token = jsonInput.get("token").toString();
+                result = shop.countCard(cardName,token);
+            }
+            case "getOnline" -> {
+                result = OnlineUser.getUser();
+            }
+            case "addAuction" -> {
+                AuctionController auction = new AuctionController();
+                result = auction.newAuction(jsonInput.get("startOffer").toString(), jsonInput.get("cardName").toString(), jsonInput.get("token").toString());
+            }
+            case "getActiveAuction" -> {
+                AuctionController auction = new AuctionController();
+                result = auction.active(jsonInput.get("token").toString());
+            }
+            case "adminAdd" ->{
+                Shop shop = new Shop();
+                result = shop.addCard(jsonInput.get("cardName").toString(),jsonInput.get("number").toString());
+            }
+            case "adminBan" ->{
+                Shop shop = new Shop();
+                result = shop.banCard(jsonInput.get("cardName").toString());
+            }
+            case "adminRemove" -> {
+                Shop shop = new Shop();
+                result = shop.removeCard(jsonInput.get("cardName").toString(),jsonInput.get("number").toString());
             }
             default -> {
                 JSONObject jsonObject = new JSONObject();

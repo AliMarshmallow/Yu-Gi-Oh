@@ -163,6 +163,15 @@ public class User {
         }
     }
 
+    public Card getCards(String name){
+        for (int i = 0; i < cards.size(); i++) {
+            if (cards.get(i).getName().equals(name)){
+                return cards.get(i);
+            }
+        }
+        return null;
+    }
+
 
     public boolean isUserLoggedIn() {
         return isUserLoggedIn;
@@ -178,5 +187,15 @@ public class User {
 
     public void setCharacterFileAddress(String characterFileAddress) {
         this.characterFileAddress = characterFileAddress;
+    }
+
+    public int showNumberOfCard(String cardName) {
+        int cnt = 0;
+        for (Card card : cards) {
+            if (card.getName().equals(cardName)) {
+                cnt++;
+            }
+        }
+        return cnt;
     }
 }
