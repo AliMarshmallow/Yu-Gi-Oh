@@ -26,10 +26,27 @@ public class Card {
     protected static HashMap<String, Boolean> cardBoolean = new HashMap<>();
     protected static HashMap<String, Integer> cardNumber = new HashMap<>();
 
+
     public static void banCard(String cardName) {
         boolean holder = cardBoolean.get(cardName);
         cardBoolean.remove(cardName);
         cardBoolean.put(cardName,!holder);
+    }
+
+    public static void setCardBoolean(HashMap<String, Boolean> cardBoolean) {
+        Card.cardBoolean = cardBoolean;
+    }
+
+    public static void setCardNumber(HashMap<String, Integer> cardNumber) {
+        Card.cardNumber = cardNumber;
+    }
+
+    public static HashMap<String, Boolean> getCardBoolean() {
+        return cardBoolean;
+    }
+
+    public static HashMap<String , Integer> getCardNumber2(){
+        return cardNumber;
     }
 
     public static int getCardNumber(String cardName)

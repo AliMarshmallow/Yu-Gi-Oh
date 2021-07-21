@@ -13,6 +13,8 @@ public class Auction {
     private int startOffer;
     private Card card;
     private long time;
+    private long id;
+    private static long idCounter = 0;
     private static ArrayList<Auction> activeAuction = new ArrayList<>();
 
 
@@ -22,6 +24,12 @@ public class Auction {
         this.startOffer = startOffer;
         this.lastOffer = startOffer;
         this.time = System.currentTimeMillis();
+        id = idCounter;
+        idCounter++;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public User getUserCreate() {
@@ -47,7 +55,6 @@ public class Auction {
     public boolean endAuction() {
         if (System.currentTimeMillis() - time >= 900000) {
             activeAuction.remove(this);
-            //TODO sell
             return true;
         }
         return false;
@@ -63,5 +70,13 @@ public class Auction {
                     + " " + auction.getUserLastOffer() + " " + auction.getLastOffer()+"\n");
         }
         return stringBuilder.toString();
+    }
+
+    public static ArrayList<Auction> getAuctions(){
+        return activeAuction;
+    }
+
+    public static void addAuction(Auction auction){
+        activeAuction.add(auction);
     }
 }
