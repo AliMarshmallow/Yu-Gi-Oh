@@ -2,9 +2,7 @@ package model.user;
 
 import model.card.Card;
 import org.json.simple.JSONObject;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
@@ -20,7 +18,6 @@ public class User {
     private String username;
     private String password;
     private String nickname;
-    private static Connection conn;
     private int score;
     private Deck activeDeck = null;
     private HashMap<String, Deck> decks;
