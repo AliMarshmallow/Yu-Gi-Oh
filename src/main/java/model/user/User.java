@@ -5,6 +5,9 @@ import org.json.simple.JSONObject;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 import org.json.simple.JSONArray;
@@ -14,6 +17,7 @@ import java.util.HashMap;
 
 public class User {
     private static ArrayList<User> allUsers = new ArrayList<>();
+    private static Connection conn;
 
     private String username;
     private String password;
@@ -49,6 +53,8 @@ public class User {
             e.printStackTrace();
         }
     }
+
+
 
     public static User getUserByNickname(String nickname) {
         for (User user : allUsers) {

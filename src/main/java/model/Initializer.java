@@ -1,6 +1,7 @@
 package model;
 
 import com.google.gson.Gson;
+import model.card.DatabaseManagement;
 import model.card.Monster;
 import model.card.Spell;
 import model.card.Trap;
@@ -11,6 +12,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.*;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,11 +20,68 @@ import java.util.List;
 public class Initializer {
 
     public static void initialize() throws IOException, ParseException {
-        initializeMonster();
-        initializeSpellsAndTraps();
+        DatabaseManagement.initDatabase();
+
+        loadMonsters();
+        loadSpells();
+        loadTraps();
+//        initializeMonster();
+//        initializeSpellsAndTraps();
         addUsers();
         addDecks();
         //showAllUsers();
+    }
+
+    public static void loadMonsters() {
+        String url = "jdbc:sqlite:resources/db.sqlite";
+        String query = "SELECT * FROM monsters;";
+
+        try(Connection conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+        ) {
+            while(rs.next()){
+                new Monster(rs.getString("name"), rs.getInt("level"), rs.getString("attribute"),
+                        rs.getString("monster_type"), rs.getString("card_type"), rs.getInt("attack"),
+                        rs.getInt("defence"), rs.getString("description"), rs.getInt("price"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadSpells() {
+        String url = "jdbc:sqlite:resources/db.sqlite";
+        String query = "SELECT * FROM spells;";
+
+        try(Connection conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+        ) {
+            while(rs.next()){
+                new Spell(rs.getString("name"), rs.getString("icon"), rs.getString("description"),
+                        rs.getString("status"), rs.getInt("price"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadTraps() {
+        String url = "jdbc:sqlite:resources/db.sqlite";
+        String query = "SELECT * FROM traps;";
+
+        try(Connection conn = DriverManager.getConnection(url);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+        ) {
+            while(rs.next()){
+                new Trap(rs.getString("name"), rs.getString("icon"), rs.getString("description"),
+                        rs.getString("status"), rs.getInt("price"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void initializeMonster() {
