@@ -150,6 +150,18 @@ public class RunServer {
                 AuctionController auction = new AuctionController();
                 result = auction.active(jsonInput.get("token").toString());
             }
+            case "adminAdd" ->{
+                Shop shop = new Shop();
+                result = shop.addCard(jsonInput.get("cardName").toString(),jsonInput.get("number").toString());
+            }
+            case "adminBan" ->{
+                Shop shop = new Shop();
+                result = shop.banCard(jsonInput.get("cardName").toString());
+            }
+            case "adminRemove" -> {
+                Shop shop = new Shop();
+                result = shop.removeCard(jsonInput.get("cardName").toString(),jsonInput.get("number").toString());
+            }
             default -> {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("type", "Error");

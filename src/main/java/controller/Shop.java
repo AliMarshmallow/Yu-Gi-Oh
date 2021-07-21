@@ -7,8 +7,6 @@ import model.card.Spell;
 import model.card.Trap;
 import model.user.User;
 import org.json.simple.JSONObject;
-
-import java.awt.dnd.DragSourceDragEvent;
 import java.util.HashMap;
 
 public class Shop {
@@ -33,6 +31,12 @@ public class Shop {
             jsonResult.put("message", "not enough money");
             return jsonResult.toJSONString();
         }
+        if(Card.getCardNumber(cardName) == 0){
+            jsonResult.put("type", "Error");
+            jsonResult.put("message", "no cards left");
+            return jsonResult.toJSONString();
+        }
+        Card.removeCardNumber(cardName,1);
         String result = "";
         if (card instanceof Monster) {
             Monster monster = (Monster) card;

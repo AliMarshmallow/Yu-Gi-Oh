@@ -60,7 +60,7 @@ public class Auction {
                 continue;
             }
             stringBuilder.append(auction.getCard().getName() + " " + auction.getUserCreate()
-                    + " " + auction.getUserLastOffer() + " " + auction.getLastOffer());
+                    + " " + auction.getUserLastOffer() + " " + auction.getLastOffer()+"\n");
         }
         return stringBuilder.toString();
     }

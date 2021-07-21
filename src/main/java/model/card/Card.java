@@ -32,8 +32,9 @@ public class Card {
         cardBoolean.put(cardName,!holder);
     }
 
-    public static HashMap<String, Integer> getCardNumber() {
-        return cardNumber;
+    public static int getCardNumber(String cardName)
+    {
+        return cardNumber.get(cardName);
     }
 
     public static void addCardNumber(String cardName, int number) {
