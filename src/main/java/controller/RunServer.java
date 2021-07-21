@@ -79,7 +79,7 @@ public class RunServer {
 
     static Object process(String input) {
         JSONObject jsonInput = null;
-        Object result;
+        Object result = null;
         try {
             jsonInput = (JSONObject) parser.parse(input);
         } catch (ParseException e) {
@@ -161,6 +161,15 @@ public class RunServer {
             case "adminRemove" -> {
                 Shop shop = new Shop();
                 result = shop.removeCard(jsonInput.get("cardName").toString(),jsonInput.get("number").toString());
+            }
+            case "addChat" -> {
+                String username = jsonInput.get("username").toString();
+                String message = jsonInput.get("message").toString();
+                ChatRoom.addMessage(username, message);
+                result = "success";
+            }
+            case "getChat" -> {
+                result = ChatRoom.getAllMessages();
             }
             default -> {
                 JSONObject jsonObject = new JSONObject();
